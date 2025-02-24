@@ -39,8 +39,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'core',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',  #Habilitar autenticación por token
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  #Requerir autenticación para acceder a la API
+    ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -84,7 +94,7 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME', 'proyectds'),
         'USER': os.getenv('DB_USER', 'postgres'),
         'PASSWORD': os.getenv('DB_PASSWORD', 'admin123'),
-        'HOST': os.getenv('DB_HOST', 'db'),  # Nombre del servicio en Docker
+        'HOST': os.getenv('DB_HOST', 'postgres_db'),  # Nombre del servicio en Docker
         'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
