@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,20 +33,35 @@ AUTH_USER_MODEL = 'core.Usuario'
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'rest_framework',
-    'rest_framework.authtoken',
-    'core',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "rest_framework",
+    "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
+    "core",
 ]
+
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),  # El token de acceso expira en 5 minutos
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),  # El refresh token dura 1 día
+    "ROTATE_REFRESH_TOKENS": True,  # Genera un nuevo refresh token cada vez que se usa
+    "BLACKLIST_AFTER_ROTATION": True,  # Invalida el refresh token antiguo después de rotarlo
+    "ALGORITHM": "HS256",  # Algoritmo de firma para los tokens (seguro y rápido)
+    "SIGNING_KEY": SECRET_KEY,  # Clave secreta usada para firmar los tokens
+    "AUTH_HEADER_TYPES": ("Bearer",),  # El token se envía en el header con "Bearer <token>"
+    "USER_ID_FIELD": "id", # Identifica a los usuarios por su ID en la base de datos
+    "USER_ID_CLAIM": "user_id", # En el payload del token, el ID del usuario se almacena como "user_id"
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",), # Tipo de token usado para autenticación
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',  #Habilitar autenticación por token
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  #Habilitar autenticación por JWT
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',  #Requerir autenticación para acceder a la API
