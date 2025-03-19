@@ -9,7 +9,7 @@ COPY . /app
 
 # Instalamos dependencias
 RUN pip install --upgrade pip
-RUN pip install -r /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
 # Exponemos el puerto 8000
 EXPOSE 8000
